@@ -4,7 +4,7 @@ const cors = require('cors')
 const {PrismaClient} = require('@prisma/client')
 const prisma = new PrismaClient()
 
-
+app.use(express.json())
 app.use(cors())
 
 
@@ -15,7 +15,18 @@ app.get('/users',async(req, res)=>{
     res.json(users)
 })
 
+app.post('/users',async(req, res)=>{
+    const user = req.body
 
+    const users = await prisma.user.createMany({
+        data:user
+    })
+
+    res.json({
+        message:'insert ok',
+        users
+    })
+})
 
 
 app.listen(2000, ()=>{
